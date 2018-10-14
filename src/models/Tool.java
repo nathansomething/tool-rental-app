@@ -4,26 +4,28 @@ import services.ToolService;
 
 public class Tool {
 
-	private ToolType toolType;
 	private String code;
+	private ToolType toolType;
 	private String brand;
 	
-	private Tool(ToolType toolType) {
-		this.toolType = toolType;
-		this.code = null; // Since code is unique, set to null to avoid duplicate
+	private Tool(String code) {
+		this.code = code;
+		this.toolType = null;
 		this.brand = "";
 	}
 	
-	public static Tool getInstance(ToolType toolType) {
-		return new Tool(toolType);
-	}
-	
-	public Tool setCode(String code) {
-		if (ToolService.isToolCodeUnique(code)) {
-			this.code = code;
-			return this;
+	public static Tool getInstance(String code, ToolService toolService) {
+		if (toolService.isToolCodeUnique(code)) {
+			Tool tool = new Tool(code);
+			toolService.addTool(tool);
+			return tool;
 		}
 		throw new IllegalArgumentException("ERROR: Tool code must be unique");
+	}
+	
+	public Tool setToolPayment(ToolType toolPayment) {
+		this.toolType = toolPayment;
+		return this;
 	}
 	
 	public Tool setBrand(String brand) {
@@ -31,12 +33,12 @@ public class Tool {
 		return this;
 	}
 	
-	ToolType type() {
-		return this.toolType;
+	public String getCode() {
+		return this.code;
 	}
 	
-	String getCode() {
-		return this.code;
+	ToolType getToolType() {
+		return this.toolType;
 	}
 	
 	String getBrand() {

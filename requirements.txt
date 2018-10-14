@@ -1,0 +1,36 @@
+- Solution must be in Java
+- Test with JUnit using given tests
+- Contains a Tool object, which has a type, brand, and code
+- Code should be unique
+- ToolType has a name and a daily charge 
+- ToolType also has 3 flags which signify whether or not a charge is applied during the following times:
+	* Weekdays
+	* Weekends
+	* Holidays
+- 2 Holidays are observed
+	* Independence Day, July 4th - If falls on weekend, it is observed on the closest weekday (if Sat, then Friday before, if Sunday, then Monday after)
+	* Labor Day - First Monday in September
+- Checkout class contains the following fields
+	* Tool code
+	* Rental day count
+	* Discount percent - As a whole number, 0-100 (e.g. 20 = 20%)
+	* Check out date
+- If rental day count is less than 1, throw exception with user friendly message
+- If discount percentage is not between 0 and 100, throw exception with user friendly message
+- RentalAgreement class contains the following fields
+	* Tool code
+	* Tool type
+	* Tool brand
+	* Rental days
+	* Check out date
+	* Due date
+	* Daily rental charge
+	* Charge days - Count of chargeable days
+	* Pre-discount charge
+	* Discount percent
+	* Discount amount
+	* Final charge
+- All dollar amounts rounded half up to cents.
+- Dates are formatted as such: mm/dd/yy
+- Currency amounts are formatted as such: $9,999.99
+- Percents are formatted as such: 99%

@@ -45,7 +45,7 @@ public class ToolType {
 		return this;
 	}
 	
-	public String getName() {
+	String getName() {
 		return this.name;
 	}
 	

@@ -25,10 +25,10 @@ public class RentalAgreement {
 	private RentalAgreement(Checkout checkout) {
 		this.currencyFormatter.setRoundingMode(RoundingMode.HALF_UP);
 		this.toolCode = checkout.getTool().getCode();
-		this.toolType = checkout.getTool().type().getName();
+		this.toolType = checkout.getTool().getToolType().getName();
 		this.toolBrand = checkout.getTool().getBrand();
 		this.rentalDays = checkout.getRentalDays();
-		this.dailyRentalChanges = this.currencyFormatter.format(checkout.getTool().type().getDailyCharge());
+		this.dailyRentalChanges = this.currencyFormatter.format(checkout.getTool().getToolType().getDailyCharge());
 		this.dueDate = checkout.getDueDate().format(this.dateFormatter);
 		this.chargeDays = checkout.getChargeDays();
 		this.preDiscountCharge = this.currencyFormatter.format(checkout.getPreDiscountCharge());

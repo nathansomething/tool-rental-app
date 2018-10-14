@@ -1,10 +1,10 @@
 package models;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import services.DateChargabilityService;
+import services.RoundingService;
+import services.ToolService;
 
 public class Checkout {
 
@@ -20,8 +20,8 @@ public class Checkout {
 		this.checkoutDate = null;
 	}
 	
-	public static Checkout getInstance(Tool tool) {
-		return new Checkout(tool);
+	public static Checkout getInstance(String toolCode, ToolService toolService) {
+		return new Checkout(toolService.getToolByCode(toolCode));
 	}
 	
 	public Checkout setRentalDayCount(int rentalDayCount) {
@@ -72,17 +72,17 @@ public class Checkout {
 		for (int dayCount = 1; dayCount <= this.rentalDayCount; dayCount++) {
 			LocalDate nextDate = this.checkoutDate.plusDays(dayCount);
 			if (DateChargabilityService.isHoliday(nextDate)) {
-				if (this.tool.type().isHolidayCharge()) {
+				if (this.tool.getToolType().isHolidayCharge()) {
 					chargeDays++;
 				}
 			}
 			else if (DateChargabilityService.isWeekend(nextDate)) {
-				if (this.tool.type().isWeekendCharge()) {
+				if (this.tool.getToolType().isWeekendCharge()) {
 					chargeDays++;
 				}
 			}
 			else if (DateChargabilityService.isWeekday(nextDate)) {
-				if (this.tool.type().isWeekdayCharge()) {
+				if (this.tool.getToolType().isWeekdayCharge()) {
 					chargeDays++;
 				}
 			}
@@ -90,15 +90,13 @@ public class Checkout {
 		return chargeDays;
 	}
 	
-	private float round(float value, int scale) {
-	    return (float) (Math.round(value * Math.pow(10, scale)) / Math.pow(10, scale));
-	}
-	
 	float getPreDiscountCharge() {
-		return round(this.getTool().type().getDailyCharge() * this.getChargeDays(), 2);
+		float charge = this.getTool().getToolType().getDailyCharge() * this.getChargeDays();
+		return RoundingService.round(charge, 2);
 	}
 	
 	float getDiscountAmount() {
-		return round(this.getPreDiscountCharge() * (this.discountPercent / 100f), 2);
+		float discount = this.getPreDiscountCharge() * (this.discountPercent / 100f);
+		return RoundingService.round(discount, 2);
 	}
 }
